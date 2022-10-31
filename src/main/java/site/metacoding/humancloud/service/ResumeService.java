@@ -15,9 +15,9 @@ import site.metacoding.humancloud.domain.category.CategoryDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
-import site.metacoding.humancloud.web.dto.request.resume.SaveDto;
-import site.metacoding.humancloud.web.dto.request.resume.UpdateDto;
-import site.metacoding.humancloud.web.dto.response.page.PagingDto;
+import site.metacoding.humancloud.dto.request.resume.SaveDto;
+import site.metacoding.humancloud.dto.request.resume.UpdateDto;
+import site.metacoding.humancloud.dto.response.page.PagingDto;
 
 @RequiredArgsConstructor
 @Service
@@ -63,11 +63,11 @@ public class ResumeService {
     // 이력서 목록
     public Map<String, Object> 이력서목록보기(Integer page) {
         if (page == null) {
-			page = 0;
-		}
-		int startNum = page * 20;
-		PagingDto paging = resumeDao.paging(page);
-		paging.dopaging();
+            page = 0;
+        }
+        int startNum = page * 20;
+        PagingDto paging = resumeDao.paging(page);
+        paging.dopaging();
 
         Map<String, Object> resumeList = new HashMap<>();
         resumeList.put("paging", paging);
@@ -117,7 +117,7 @@ public class ResumeService {
         return resumeDao.orderByRecommend(companyId);
     }
 
-    public void 열람횟수증가(Integer resumeId){
+    public void 열람횟수증가(Integer resumeId) {
         resumeDao.updateReadCount(resumeId);
     }
 }

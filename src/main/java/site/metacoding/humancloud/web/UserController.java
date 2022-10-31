@@ -1,22 +1,25 @@
 package site.metacoding.humancloud.web;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import lombok.RequiredArgsConstructor;
-import site.metacoding.humancloud.domain.company.Company;
-import site.metacoding.humancloud.domain.subscribe.Subscribe;
-import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
-import site.metacoding.humancloud.domain.user.User;
-import site.metacoding.humancloud.service.UserService;
-import site.metacoding.humancloud.web.dto.CMRespDto;
-import site.metacoding.humancloud.web.dto.request.user.JoinDto;
-import site.metacoding.humancloud.web.dto.request.user.LoginDto;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import lombok.RequiredArgsConstructor;
+import site.metacoding.humancloud.domain.user.User;
+import site.metacoding.humancloud.dto.ResponseDto;
+import site.metacoding.humancloud.dto.request.user.JoinDto;
+import site.metacoding.humancloud.dto.request.user.LoginDto;
+import site.metacoding.humancloud.service.UserService;
 
 @RequiredArgsConstructor
 @Controller
@@ -26,16 +29,16 @@ public class UserController {
     private final HttpSession session;
 
     @DeleteMapping("/user/{id}")
-    public @ResponseBody CMRespDto<?> delete(@PathVariable Integer id) {
+    public @ResponseBody ResponseDto<?> delete(@PathVariable Integer id) {
         userService.회원탈퇴(id);
         session.invalidate();
-        return new CMRespDto<>(1, "회원탈퇴성공", null);
+        return new ResponseDto<>(1, "회원탈퇴성공", null);
     }
 
     @PutMapping("/update/{id}")
-    public @ResponseBody CMRespDto<?> update(@PathVariable Integer id, @RequestBody JoinDto joinDto) {
+    public @ResponseBody ResponseDto<?> update(@PathVariable Integer id, @RequestBody JoinDto joinDto) {
         userService.회원업데이트(id, joinDto);
-        return new CMRespDto<>(1, "ok", null);
+        return new ResponseDto<>(1, "ok", null);
     }
 
     @GetMapping("/update/{id}")
@@ -65,28 +68,28 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public @ResponseBody CMRespDto<?> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
+    public @ResponseBody ResponseDto<?> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
         User result = userService.로그인(loginDto);
         if (result != null) {
             HttpSession session = request.getSession();
             session.setAttribute("principal", result);
         }
-        return new CMRespDto<>(1, "1", result);
+        return new ResponseDto<>(1, "1", result);
     }
 
     @PostMapping("/user/join")
-    public @ResponseBody CMRespDto<?> joinUser(@RequestBody JoinDto joinDto) {
+    public @ResponseBody ResponseDto<?> joinUser(@RequestBody JoinDto joinDto) {
         userService.회원가입(joinDto);
-        return new CMRespDto<>(1, "ok", null);
+        return new ResponseDto<>(1, "ok", null);
     }
 
     @GetMapping("/user/usernameSameCheck")
-    public @ResponseBody CMRespDto<?> usernameSameCheck(@RequestParam("username") String username) {
+    public @ResponseBody ResponseDto<?> usernameSameCheck(@RequestParam("username") String username) {
         Boolean result = userService.유저네임중복체크(username);
         if (result == true) {
-            return new CMRespDto<>(1, "ok", true);
+            return new ResponseDto<>(1, "ok", true);
         }
-        return new CMRespDto<>(1, "same id", false);
+        return new ResponseDto<>(1, "same id", false);
     }
 
     @GetMapping("/join")

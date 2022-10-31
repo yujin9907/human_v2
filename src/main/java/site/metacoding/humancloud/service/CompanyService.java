@@ -15,10 +15,10 @@ import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
-import site.metacoding.humancloud.web.dto.request.company.LoginDto;
-import site.metacoding.humancloud.web.dto.request.company.UpdateDto;
-import site.metacoding.humancloud.web.dto.response.page.PagingDto;
-import site.metacoding.humancloud.web.dto.response.user.ResCompanyDto;
+import site.metacoding.humancloud.dto.request.company.LoginDto;
+import site.metacoding.humancloud.dto.request.company.UpdateDto;
+import site.metacoding.humancloud.dto.response.page.PagingDto;
+import site.metacoding.humancloud.dto.response.user.ResCompanyDto;
 
 @Service
 @RequiredArgsConstructor
@@ -67,10 +67,9 @@ public class CompanyService {
 		PagingDto paging = companyDao.paging(page);
 		paging.dopaging();
 
-
 		Map<String, Object> result = new HashMap<>();
-        result.put("paging", paging);
-        result.put("list", companyDao.findAll(startNum));
+		result.put("paging", paging);
+		result.put("list", companyDao.findAll(startNum));
 		return result;
 	}
 
@@ -108,7 +107,7 @@ public class CompanyService {
 		return recruitDao.findByCompanyId(id);
 	}
 
-	public List<Resume> 지원목록보기(Integer companyId){
+	public List<Resume> 지원목록보기(Integer companyId) {
 		return resumeDao.applyResumeList(companyId);
 	}
 }

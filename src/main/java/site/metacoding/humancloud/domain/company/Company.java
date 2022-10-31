@@ -9,12 +9,12 @@ import org.springframework.data.redis.core.RedisHash;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.metacoding.humancloud.web.dto.request.company.UpdateDto;
+import site.metacoding.humancloud.dto.request.company.UpdateDto;
 
 @NoArgsConstructor
 @Getter
 @Setter
-@RedisHash("company")
+// @RedisHash("company")
 public class Company implements Serializable {
 	@Id
 	private Integer companyId;

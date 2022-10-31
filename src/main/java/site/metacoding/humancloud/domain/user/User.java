@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@RedisHash("user")
+// @RedisHash("user")
 public class User implements Serializable {
 	@Id
 	private Integer userId;

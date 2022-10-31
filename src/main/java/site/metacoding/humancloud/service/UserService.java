@@ -10,17 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.company.Company;
-import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.domain.user.UserDao;
-import site.metacoding.humancloud.web.dto.request.user.LoginDto;
-import site.metacoding.humancloud.web.dto.response.user.CompanyRankingDto;
-import site.metacoding.humancloud.web.dto.request.user.JoinDto;
-
-import javax.servlet.http.HttpSession;
+import site.metacoding.humancloud.dto.request.user.JoinDto;
+import site.metacoding.humancloud.dto.request.user.LoginDto;
+import site.metacoding.humancloud.dto.response.user.CompanyRankingDto;
 
 @RequiredArgsConstructor
 @Service

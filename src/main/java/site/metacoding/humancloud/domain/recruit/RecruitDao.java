@@ -1,12 +1,11 @@
 package site.metacoding.humancloud.domain.recruit;
 
 import java.util.List;
-import java.util.concurrent.RecursiveAction;
 
-import site.metacoding.humancloud.web.dto.request.recruit.SaveDto;
-import site.metacoding.humancloud.web.dto.response.page.PagingDto;
-import site.metacoding.humancloud.web.dto.response.recruit.CompanyRecruitDto;
-import site.metacoding.humancloud.web.dto.response.recruit.RecruitDetail;
+import site.metacoding.humancloud.dto.request.recruit.SaveDto;
+import site.metacoding.humancloud.dto.response.page.PagingDto;
+import site.metacoding.humancloud.dto.response.recruit.CompanyRecruitDto;
+import site.metacoding.humancloud.dto.response.recruit.RecruitDetail;
 
 public interface RecruitDao {
 	public void save(SaveDto saveDto);

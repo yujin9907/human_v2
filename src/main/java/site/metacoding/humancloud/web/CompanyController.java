@@ -3,33 +3,36 @@ package site.metacoding.humancloud.web;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.user.User;
-import site.metacoding.humancloud.service.ApplyService;
+import site.metacoding.humancloud.dto.ResponseDto;
+import site.metacoding.humancloud.dto.request.company.LoginDto;
+import site.metacoding.humancloud.dto.request.company.SaveDto;
+import site.metacoding.humancloud.dto.request.company.UpdateDto;
+import site.metacoding.humancloud.dto.response.user.ResCompanyDto;
 import site.metacoding.humancloud.service.CompanyService;
-import site.metacoding.humancloud.service.RecruitService;
 import site.metacoding.humancloud.service.SubscribeService;
-import site.metacoding.humancloud.web.dto.CMRespDto;
-import site.metacoding.humancloud.web.dto.request.company.LoginDto;
-import site.metacoding.humancloud.web.dto.request.company.SaveDto;
-import site.metacoding.humancloud.web.dto.request.company.UpdateDto;
-import site.metacoding.humancloud.web.dto.response.user.ResCompanyDto;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller
 @RequiredArgsConstructor
@@ -47,15 +50,15 @@ public class CompanyController {
 
 	// 기업회원 username 중복체크
 	@GetMapping("/company/checkSameUsername")
-	public @ResponseBody CMRespDto<?> checkSameUsername(@RequestParam("companyUsername") String companyUsername) {
+	public @ResponseBody ResponseDto<?> checkSameUsername(@RequestParam("companyUsername") String companyUsername) {
 		boolean isSame = companyService.checkSameUsername(companyUsername);
-		return new CMRespDto<>(1, "통신 성공", isSame);
+		return new ResponseDto<>(1, "통신 성공", isSame);
 	}
 
 	// 기업 회원가입
 	@PostMapping(value = "/company/save", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public @ResponseBody CMRespDto<?> save(@RequestPart("file") MultipartFile file,
+	public @ResponseBody ResponseDto<?> save(@RequestPart("file") MultipartFile file,
 			@RequestPart("saveDto") SaveDto saveDto) throws Exception {
 
 		int pos = file.getOriginalFilename().lastIndexOf(".");
@@ -80,7 +83,7 @@ public class CompanyController {
 
 		Company company = saveDto.toEntity(logo);
 		companyService.saveCompany(company);
-		return new CMRespDto<>(1, "기업 등록 성공", logo);
+		return new ResponseDto<>(1, "기업 등록 성공", logo);
 	}
 
 	// 기업 정보 상세보기
@@ -113,7 +116,7 @@ public class CompanyController {
 	// 기업 정보 수정
 	@PutMapping(value = "/company/update/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public @ResponseBody CMRespDto<?> update(@PathVariable Integer id, @RequestPart("file") MultipartFile file,
+	public @ResponseBody ResponseDto<?> update(@PathVariable Integer id, @RequestPart("file") MultipartFile file,
 			@RequestPart("updateDto") UpdateDto updateDto) throws Exception {
 		System.out.println("controller실행");
 
@@ -139,17 +142,17 @@ public class CompanyController {
 
 		updateDto.setCompanyLogo(logo);
 		companyService.updateCompany(id, updateDto);
-		return new CMRespDto<>(1, "기업정보 수정완료", logo);
+		return new ResponseDto<>(1, "기업정보 수정완료", logo);
 	}
 
 	@DeleteMapping("/company/delete/{id}")
-	public @ResponseBody CMRespDto<?> delete(@PathVariable Integer id) {
+	public @ResponseBody ResponseDto<?> delete(@PathVariable Integer id) {
 		companyService.deleteCompany(id);
-		return new CMRespDto<>(1, "기업정보 삭제 완료", null);
+		return new ResponseDto<>(1, "기업정보 삭제 완료", null);
 	}
 
 	@PostMapping("/company/login")
-	public @ResponseBody CMRespDto<?> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
+	public @ResponseBody ResponseDto<?> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
 		ResCompanyDto result = companyService.로그인(loginDto);
 
 		if (result != null) {
@@ -157,7 +160,7 @@ public class CompanyController {
 			session.setAttribute("companyPrincipal", result.getCompany());
 			session.setAttribute("subscribeList", result.getSubscribe());
 		}
-		return new CMRespDto<>(1, "1", result.getCompany());
+		return new ResponseDto<>(1, "1", result.getCompany());
 	}
 
 	@GetMapping("/company/mypage")

@@ -18,13 +18,13 @@ import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.user.User;
+import site.metacoding.humancloud.dto.ResponseDto;
+import site.metacoding.humancloud.dto.request.recruit.SaveDto;
+import site.metacoding.humancloud.dto.response.recruit.CompanyRecruitDto;
 import site.metacoding.humancloud.service.ApplyService;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.RecruitService;
 import site.metacoding.humancloud.service.SubscribeService;
-import site.metacoding.humancloud.web.dto.CMRespDto;
-import site.metacoding.humancloud.web.dto.request.recruit.SaveDto;
-import site.metacoding.humancloud.web.dto.response.recruit.CompanyRecruitDto;
 
 @RequiredArgsConstructor
 @Controller
@@ -49,11 +49,11 @@ public class RecruitController {
   }
 
   @PutMapping("recruit/update")
-  public @ResponseBody CMRespDto<?> update(@RequestBody SaveDto saveDto) {
+  public @ResponseBody ResponseDto<?> update(@RequestBody SaveDto saveDto) {
 
     recruitService.구인공고업데이트(saveDto);
 
-    return new CMRespDto<>(1, "성공", null);
+    return new ResponseDto<>(1, "성공", null);
   }
 
   @GetMapping("/recruit/detail/{id}/{userId}")
@@ -72,11 +72,11 @@ public class RecruitController {
   }
 
   @PostMapping("/recruit/save")
-  public @ResponseBody CMRespDto<?> write(@RequestBody SaveDto saveDto) {
+  public @ResponseBody ResponseDto<?> write(@RequestBody SaveDto saveDto) {
 
     recruitService.구인공고작성(saveDto);
 
-    return new CMRespDto<>(1, "성공", null);
+    return new ResponseDto<>(1, "성공", null);
   }
 
   @GetMapping("/recruit/list")
@@ -86,20 +86,20 @@ public class RecruitController {
   }
 
   @PostMapping("/recruit/category")
-  public @ResponseBody CMRespDto<?> viewCategory(@RequestBody Category category) {
+  public @ResponseBody ResponseDto<?> viewCategory(@RequestBody Category category) {
     System.out.println(recruitService.분류별채용공고목록보기(category.getCategoryName()));
-    return new CMRespDto<>(1, "OK", recruitService.분류별채용공고목록보기(category.getCategoryName()));
+    return new ResponseDto<>(1, "OK", recruitService.분류별채용공고목록보기(category.getCategoryName()));
   }
 
   @PostMapping("/recruit/list")
-  public @ResponseBody CMRespDto<?> orderRecruitList(@RequestParam("order") String order, @RequestBody User user) {
-    return new CMRespDto<>(1, "ok", recruitService.정렬하기(order, user.getUserId()));
+  public @ResponseBody ResponseDto<?> orderRecruitList(@RequestParam("order") String order, @RequestBody User user) {
+    return new ResponseDto<>(1, "ok", recruitService.정렬하기(order, user.getUserId()));
   }
 
   @DeleteMapping("/recruit/delete/{recruitId}")
-  public @ResponseBody CMRespDto<?> recruitDelete(@PathVariable Integer recruitId) {
+  public @ResponseBody ResponseDto<?> recruitDelete(@PathVariable Integer recruitId) {
     Integer code = recruitService.공고삭제하기(recruitId);
-    return new CMRespDto<>(code, "ok", null);
+    return new ResponseDto<>(code, "ok", null);
   }
 
 }

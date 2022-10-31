@@ -2,9 +2,9 @@ package site.metacoding.humancloud.domain.resume;
 
 import java.util.List;
 
-import site.metacoding.humancloud.web.dto.request.resume.SaveDto;
-import site.metacoding.humancloud.web.dto.request.resume.UpdateDto;
-import site.metacoding.humancloud.web.dto.response.page.PagingDto;
+import site.metacoding.humancloud.dto.request.resume.SaveDto;
+import site.metacoding.humancloud.dto.request.resume.UpdateDto;
+import site.metacoding.humancloud.dto.response.page.PagingDto;
 
 public interface ResumeDao {
 	public void save(SaveDto saveDto);

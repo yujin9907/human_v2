@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.Company;
-import site.metacoding.humancloud.web.dto.request.recruit.SaveDto;
+import site.metacoding.humancloud.dto.request.recruit.SaveDto;
 
 @NoArgsConstructor
 @Getter

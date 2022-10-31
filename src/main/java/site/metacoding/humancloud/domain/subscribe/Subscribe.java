@@ -3,8 +3,6 @@ package site.metacoding.humancloud.domain.subscribe;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import org.springframework.data.redis.core.RedisHash;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

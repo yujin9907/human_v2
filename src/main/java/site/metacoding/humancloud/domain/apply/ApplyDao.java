@@ -2,7 +2,7 @@ package site.metacoding.humancloud.domain.apply;
 
 import java.util.List;
 
-import site.metacoding.humancloud.dto.request.apply.SaveDto;
+import site.metacoding.humancloud.dto.dummy.request.apply.SaveDto;
 
 public interface ApplyDao {
 	public void save(SaveDto saveDto);

@@ -1,4 +1,4 @@
-package site.metacoding.humancloud.dto.response.user;
+package site.metacoding.humancloud.dto.dummy.response.user;
 
 import lombok.Getter;
 import lombok.Setter;

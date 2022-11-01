@@ -1,4 +1,4 @@
-package site.metacoding.humancloud.dto.request.resume;
+package site.metacoding.humancloud.dto.dummy.request.resume;
 
 import java.util.List;
 
@@ -7,8 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateDto {
+public class SaveDto {
   private Integer resumeId;
+  private Integer resumeUserId;
   private String resumeTitle;
   private String resumeEducation;
   private String resumeCareer;
@@ -16,13 +17,13 @@ public class UpdateDto {
   private String resumeLink;
   private List<String> categoryList;
 
-  public UpdateDto() {
+  public SaveDto() {
 
   }
 
-  public UpdateDto(Integer resumeId, String resumeTitle, String resumeEducation, String resumeCareer,
+  public SaveDto(Integer resumeUserId, String resumeTitle, String resumeEducation, String resumeCareer,
       String resumePhoto, String resumeLink, List<String> categoryList) {
-    this.resumeId = resumeId;
+    this.resumeUserId = resumeUserId;
     this.resumeTitle = resumeTitle;
     this.resumeEducation = resumeEducation;
     this.resumeCareer = resumeCareer;

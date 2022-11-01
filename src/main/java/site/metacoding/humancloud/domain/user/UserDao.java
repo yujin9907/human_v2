@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import site.metacoding.humancloud.dto.request.user.JoinDto;
-import site.metacoding.humancloud.dto.response.user.CompanyRankingDto;
+import site.metacoding.humancloud.dto.dummy.request.user.JoinDto;
+import site.metacoding.humancloud.dto.dummy.response.user.CompanyRankingDto;
 
 public interface UserDao {
 	public int save(JoinDto joinDto);

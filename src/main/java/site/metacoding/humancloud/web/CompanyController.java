@@ -27,10 +27,10 @@ import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
-import site.metacoding.humancloud.dto.request.company.LoginDto;
-import site.metacoding.humancloud.dto.request.company.SaveDto;
-import site.metacoding.humancloud.dto.request.company.UpdateDto;
-import site.metacoding.humancloud.dto.response.user.ResCompanyDto;
+import site.metacoding.humancloud.dto.dummy.request.company.LoginDto;
+import site.metacoding.humancloud.dto.dummy.request.company.SaveDto;
+import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
+import site.metacoding.humancloud.dto.dummy.response.user.ResCompanyDto;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.SubscribeService;
 

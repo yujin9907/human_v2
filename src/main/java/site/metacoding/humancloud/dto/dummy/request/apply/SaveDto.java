@@ -1,4 +1,4 @@
-package site.metacoding.humancloud.dto.request.apply;
+package site.metacoding.humancloud.dto.dummy.request.apply;
 
 import java.sql.Timestamp;
 

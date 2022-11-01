@@ -15,10 +15,10 @@ import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
-import site.metacoding.humancloud.dto.request.company.LoginDto;
-import site.metacoding.humancloud.dto.request.company.UpdateDto;
-import site.metacoding.humancloud.dto.response.page.PagingDto;
-import site.metacoding.humancloud.dto.response.user.ResCompanyDto;
+import site.metacoding.humancloud.dto.dummy.request.company.LoginDto;
+import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
+import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
+import site.metacoding.humancloud.dto.dummy.response.user.ResCompanyDto;
 
 @Service
 @RequiredArgsConstructor

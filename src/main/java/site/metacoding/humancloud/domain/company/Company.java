@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.metacoding.humancloud.dto.request.company.UpdateDto;
+import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
 
 @NoArgsConstructor
 @Getter

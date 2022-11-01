@@ -2,7 +2,7 @@ package site.metacoding.humancloud.domain.company;
 
 import java.util.List;
 
-import site.metacoding.humancloud.dto.response.page.PagingDto;
+import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 
 public interface CompanyDao {
 	public void save(Company company);

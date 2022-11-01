@@ -1,4 +1,4 @@
-package site.metacoding.humancloud.dto.request.recruit;
+package site.metacoding.humancloud.dto.dummy.request.recruit;
 
 import java.util.List;
 

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
-import site.metacoding.humancloud.dto.request.user.JoinDto;
-import site.metacoding.humancloud.dto.request.user.LoginDto;
+import site.metacoding.humancloud.dto.dummy.request.user.JoinDto;
+import site.metacoding.humancloud.dto.dummy.request.user.LoginDto;
 import site.metacoding.humancloud.service.UserService;
 
 @RequiredArgsConstructor

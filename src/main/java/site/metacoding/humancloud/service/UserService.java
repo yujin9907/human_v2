@@ -15,9 +15,9 @@ import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.domain.user.UserDao;
-import site.metacoding.humancloud.dto.request.user.JoinDto;
-import site.metacoding.humancloud.dto.request.user.LoginDto;
-import site.metacoding.humancloud.dto.response.user.CompanyRankingDto;
+import site.metacoding.humancloud.dto.dummy.request.user.JoinDto;
+import site.metacoding.humancloud.dto.dummy.request.user.LoginDto;
+import site.metacoding.humancloud.dto.dummy.response.user.CompanyRankingDto;
 
 @RequiredArgsConstructor
 @Service

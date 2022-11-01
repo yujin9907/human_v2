@@ -1,4 +1,4 @@
-package site.metacoding.humancloud.dto.response.page;
+package site.metacoding.humancloud.dto.dummy.response.page;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -24,8 +24,8 @@ import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.dto.ResponseDto;
-import site.metacoding.humancloud.dto.request.resume.SaveDto;
-import site.metacoding.humancloud.dto.request.resume.UpdateDto;
+import site.metacoding.humancloud.dto.dummy.request.resume.SaveDto;
+import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
 import site.metacoding.humancloud.service.ResumeService;
 import site.metacoding.humancloud.service.UserService;
 

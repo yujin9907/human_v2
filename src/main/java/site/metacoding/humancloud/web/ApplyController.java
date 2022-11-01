@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.dto.ResponseDto;
-import site.metacoding.humancloud.dto.request.apply.SaveDto;
+import site.metacoding.humancloud.dto.dummy.request.apply.SaveDto;
 import site.metacoding.humancloud.service.ApplyService;
 import site.metacoding.humancloud.service.ResumeService;
 

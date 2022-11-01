@@ -1,4 +1,4 @@
-package site.metacoding.humancloud.dto.request.company;
+package site.metacoding.humancloud.dto.dummy.request.company;
 
 import lombok.Getter;
 import lombok.Setter;

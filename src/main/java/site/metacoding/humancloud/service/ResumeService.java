@@ -15,9 +15,9 @@ import site.metacoding.humancloud.domain.category.CategoryDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
-import site.metacoding.humancloud.dto.request.resume.SaveDto;
-import site.metacoding.humancloud.dto.request.resume.UpdateDto;
-import site.metacoding.humancloud.dto.response.page.PagingDto;
+import site.metacoding.humancloud.dto.dummy.request.resume.SaveDto;
+import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
+import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 
 @RequiredArgsConstructor
 @Service

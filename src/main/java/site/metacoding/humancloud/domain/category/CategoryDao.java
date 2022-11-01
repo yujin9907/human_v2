@@ -2,7 +2,6 @@ package site.metacoding.humancloud.domain.category;
 
 import java.util.List;
 
-import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.resume.Resume;
 
 public interface CategoryDao {

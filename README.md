@@ -7,6 +7,10 @@
 - mybatis 경로 주의
 - Exception은 throw new RuntimeException("필요한 메세지")로 작성
 - Controller의 경로는 인증이 필요한 메서드들은 "/s"를 앞에 붙이고, 그 이외의 것들은 "/도메인/**" 방식으로 작성
+- Entity 생성자에는 @Builder 작성
+- toEntity()는 Dto마다 작성, 관련 Dto 들도 각각 Dto 내에서 작성해서 사용
+- insert는 SaveDto, update는 UpdateDto로 작성. 리스트를 보여주는 Dto는 도메인AllRespDto로 작성
+- List 객체들의 변수명은 "도메인명List"로 작성
 
 ### DB - user생성 및 권한 부여
 ```sql

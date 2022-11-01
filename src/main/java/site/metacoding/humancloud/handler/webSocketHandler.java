@@ -28,12 +28,5 @@ public class webSocketHandler implements HandshakeInterceptor {
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
             Exception ex) {
     }
-    // TextWebSocketHandler 상속 시 사용 가능
-    // @Override
-    // protected void handleTextMessage(WebSocketSession session, TextMessage
-    // message) throws Exception {
-    // Subscribe httpSessionSubscribe = (Subscribe)
-    // session.getAttributes().get("subscribe");
-    // }
 
 }

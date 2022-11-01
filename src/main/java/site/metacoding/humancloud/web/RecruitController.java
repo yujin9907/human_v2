@@ -1,7 +1,5 @@
 package site.metacoding.humancloud.web;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,11 +18,9 @@ import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.request.recruit.SaveDto;
-import site.metacoding.humancloud.dto.response.recruit.CompanyRecruitDto;
 import site.metacoding.humancloud.service.ApplyService;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.RecruitService;
-import site.metacoding.humancloud.service.SubscribeService;
 
 @RequiredArgsConstructor
 @Controller

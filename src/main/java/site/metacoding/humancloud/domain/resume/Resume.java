@@ -1,7 +1,6 @@
 package site.metacoding.humancloud.domain.resume;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

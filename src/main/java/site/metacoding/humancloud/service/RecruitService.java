@@ -1,28 +1,24 @@
 package site.metacoding.humancloud.service;
 
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.category.CategoryDao;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
-import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.dto.request.recruit.SaveDto;
 import site.metacoding.humancloud.dto.response.page.PagingDto;
 import site.metacoding.humancloud.dto.response.recruit.CompanyRecruitDto;
-import site.metacoding.humancloud.web.RecruitController;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Service

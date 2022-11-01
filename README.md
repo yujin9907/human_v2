@@ -1,4 +1,12 @@
-# 미니프로젝트 humancloud - 이력서 관리 웹 사이트
+# 미니프로젝트 humancloud2 - Rest하게 서버 만들기
+
+### 개요
+- Controller는 RestController로 변경
+- Service의 모든 메서드에는 @Transactional 작성
+- 각 도메인의 ReqDto와 RespDto 내에서 static으로 세부 Dto 만들어서 사용
+- mybatis 경로 주의
+- Exception은 throw new RuntimeException("필요한 메세지")로 작성
+- Controller의 경로는 인증이 필요한 메서드들은 "/s"를 앞에 붙이고, 그 이외의 것들은 "/도메인/**" 방식으로 작성
 
 ### DB - user생성 및 권한 부여
 ```sql
@@ -504,12 +512,3 @@ Get 요청을 받아  findById 메서드 실행을 한 후,
 jstl 로 view 페이지에 로드 했음
 
 layout/header.jsp 에서 충돌나는 헤드 코드 saveForm 에서만 쓰일 수 있도록 코드 옮김. 이 전의 코드를 참고.
-
-### 부트스트랩 로드 오류
-부트스트랩 Font 로드 오류가 있어 수정함
-![Untitled](https://user-images.githubusercontent.com/92712092/194812543-6bf839a5-8397-4b4b-9dba-ac9d8f75e191.png)
-
-### 테이블에 컬럼 추가 for MariaDB(해결됨)
-```sql
-ALTER TABLE recruit ADD COLUMN recruit_deadline VARCHAR(20) AFTER recruit_company_id;
-```

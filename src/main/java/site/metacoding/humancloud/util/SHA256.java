@@ -5,7 +5,6 @@ import java.security.NoSuchAlgorithmException;
 
 import org.springframework.stereotype.Component;
 
-// https://bamdule.tistory.com/233
 @Component
 public class SHA256 {
 

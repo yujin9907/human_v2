@@ -1,14 +1,15 @@
 package site.metacoding.humancloud.handler;
 
-import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-public class GlobalExceptionHandler implements HandlerInterceptor {
+import site.metacoding.humancloud.dto.ResponseDto;
 
-    // @Override
-    // public boolean preHandle(HttpServletRequest request, HttpServletResponse
-    // response, Object handler)
-    // throws Exception {
+@RestControllerAdvice
+public class GlobalExceptionHandler {
 
-    // }
-
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseDto<?> apiError(Exception e) {
+        return new ResponseDto<>(-1, e.getMessage(), null);
+    }
 }

@@ -21,11 +21,13 @@ import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
+import site.metacoding.humancloud.domain.subscribe.Subscribe;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyDetailRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
@@ -44,21 +46,24 @@ public class CompanyService {
 	private final UserDao userDao;
 
 	// 회원 username 중복체크
-	public boolean 유저네임중복체크(String companyUsername) {
-		UserFindByAllUsernameDto username = userDao.findAllUsername(companyUsername);
-		if (username == null) {
-			return true;
-		}
-		return false;
-	}
+	// public boolean 유저네임중복체크(String companyUsername) {
+	// Optional<UserFindByAllUsernameDto> username =
+	// userDao.findAllUsername(companyUsername);
+	// if (username == null) {
+	// return true;
+	// }
+	// return false;
+	// }
 
 	// 기업 회원 등록
 	@Transactional
 	public void 기업회원등록(MultipartFile file, CompanyJoinReqDto companyJoinReqDto) throws Exception {
-		boolean checkUsername = 유저네임중복체크(companyJoinReqDto.getCompanyUsername());
-		if (checkUsername == false) {
-			throw new RuntimeException("아이디 중복 오류");
+		Optional<UserFindByAllUsernameDto> usernameDto = userDao
+				.findAllUsername(companyJoinReqDto.getCompanyUsername());
+		if (usernameDto.isPresent()) {
+			throw new RuntimeException("중복된 아이디입니다.");
 		}
+
 		int pos = file.getOriginalFilename().lastIndexOf(".");
 		String extension = file.getOriginalFilename().substring(pos + 1);
 		String filePath = "C:\\temp\\img\\";
@@ -84,20 +89,26 @@ public class CompanyService {
 		companyDao.save(company);
 	}
 
-	// // 기업 정보 상세보기
-	// public Company getCompanyDetail(Integer companyId) {
-	// Company companyPS = companyDao.findById(companyId);
+	// 기업 정보 상세보기
+	@Transactional(readOnly = true)
+	public CompanyDetailRespDto 기업정보상세보기(Integer userId, Integer companyId) {
+		Optional<CompanyFindById> companyOP = companyDao.findById(companyId);
+		if (subscribeDao.findById(userId, companyId) == null) {
+			return false;
+		}
+		return true;
+		CompanyDetailRespDto companyPS = new CompanyDetailRespDto(companyOP.get(), true);
 
-	// // 전화번호 포매팅
-	// String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
-	// if (Pattern.matches(fomat, companyPS.getCompanyPhoneNumber())) {
-	// String result = companyPS.getCompanyPhoneNumber().replaceAll(fomat,
-	// "$1-$2-$3");
-	// companyPS.toPhoneNumber(result);
-	// }
+		// 전화번호 포매팅
+		String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
+		if (Pattern.matches(fomat, companyPS.getCompanyPhoneNumber())) {
+			String result = companyPS.getCompanyPhoneNumber().replaceAll(fomat,
+					"$1-$2-$3");
+			companyPS.toPhoneNumber(result);
+		}
 
-	// return companyPS;
-	// }
+		return companyPS;
+	}
 
 	// 기업 리스트 보기
 	public Map<String, Object> getCompanyList(Integer page) {
@@ -174,21 +185,6 @@ public class CompanyService {
 
 		companyDao.deleteById(id);
 	}
-
-	// public SessionUser 로그인(CompanyLoginReqDto companyLoginReqDto) {
-	// Company companyPS =
-	// companyDao.findByUsername(companyLoginReqDto.getCompanyUsername());
-	// String encPassword = sha256.encrypt(companyLoginReqDto.getCompanyPassword());
-	// if (companyPS == null) {
-	// throw new RuntimeException("회원가입 되지 않았습니다.");
-	// } else {
-	// if (!companyPS.getCompanyPassword().equals(encPassword)) {
-	// throw new RuntimeException("아이디 혹은 패스워드가 잘못 입력되었습니다.");
-	// }
-	// return SessionUser.builder().company(companyPS).build();
-	// }
-
-	// }
 
 	public List<Recruit> 채용공고리스트불러오기(Integer id) {
 		for (int i = 0; i < recruitDao.findByCompanyId(id).size(); i++) {

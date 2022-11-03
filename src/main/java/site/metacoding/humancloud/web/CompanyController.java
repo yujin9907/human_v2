@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
+import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyLoginReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
@@ -39,14 +40,6 @@ public class CompanyController {
 	private final SubscribeService subscribeService;
 	private final HttpSession session;
 
-	// 기업회원 username 중복체크
-	// @GetMapping("/company/checkSameUsername")
-	// public @ResponseBody ResponseDto<?>
-	// checkSameUsername(@RequestParam("companyUsername") String companyUsername) {
-	// boolean isSame = companyService.checkSameUsername(companyUsername);
-	// return new ResponseDto<>(1, "통신 성공", isSame);
-	// }
-
 	// 기업 회원가입
 	@PostMapping(value = "/company/join", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -58,19 +51,17 @@ public class CompanyController {
 
 	// 기업 정보 상세보기
 	@GetMapping("/company/{id}")
-	public String getCompanyDetail(@PathVariable Integer id, Model model) {
-		User userSession = (User) session.getAttribute("principal");
-		if (userSession == null) {
-			model.addAttribute("company", companyService.getCompanyDetail(id));
-		} else {
-			model.addAttribute("company", companyService.getCompanyDetail(id));
-			model.addAttribute("isSub", subscribeService.구독확인(userSession.getUserId(), id));
+	public ResponseDto<?> getCompanyDetail(@PathVariable Integer id) {
+		SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+		Integer userId = 0;
+		if (sessionUser == null) {
+			userId = sessionUser.getId();
 		}
-		return "page/company/detail";
+		return new ResponseDto<>(1, "기업정보 상세보기 성공", companyService.기업정보상세보기(userId, id));
 	}
 
 	// 기업 리스트 보기
-	@GetMapping("/companys")
+	@GetMapping("/company")
 	public String getCompanyList(Model model, @Param("page") Integer page) {
 		model.addAttribute("companyList", companyService.getCompanyList(page));
 		return "page/company/companyList";
@@ -90,13 +81,6 @@ public class CompanyController {
 		companyService.기업정보삭제(id);
 		return new ResponseDto<>(1, "기업정보 삭제 완료", null);
 	}
-
-	// @PostMapping("/company/login")
-	// public ResponseDto<?> login(@RequestBody CompanyLoginReqDto
-	// companyLoginReqDto) {
-	// return new ResponseDto<>(1, "로그인 성공",
-	// companyService.로그인(companyLoginReqDto));
-	// }
 
 	@GetMapping("/company/mypage")
 	public String viewMypage(@RequestParam Integer id, Model model) {

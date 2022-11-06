@@ -1,5 +1,8 @@
 package site.metacoding.humancloud.web;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
@@ -121,6 +124,9 @@ public class ResumeController {
       @RequestPart("resumeReqSaveDto") ResumeSaveReqDto resumeSaveReqDto) throws Exception {
 
     resumeService.이력서저장(file, resumeSaveReqDto);
+
+    List<String> test = Arrays.asList("생성");
+    log.debug("리스트 테스트 : " + test.get(0));
 
     return new ResponseDto<>(1, "업로드 성공", null);
   }

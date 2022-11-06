@@ -34,6 +34,7 @@ public class UserAuthInterceptor implements HandlerInterceptor {
         return true;
       }
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+
       throw new RuntimeException("권한이 없습니다.");
     }
 

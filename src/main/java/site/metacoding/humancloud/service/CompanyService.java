@@ -3,9 +3,7 @@ package site.metacoding.humancloud.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,9 +24,11 @@ import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyDetailRespDto;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindAllRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyJoinRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto.CompanyRecruitDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompanyIdRespDto;
@@ -112,18 +112,20 @@ public class CompanyService {
 	}
 
 	// 기업 리스트 보기
-	public Map<String, Object> getCompanyList(Integer page) {
+	@Transactional(readOnly = true)
+	public CompanyFindAllRespDto 기업리스트보기(Integer page) {
 		if (page == null) {
 			page = 0;
 		}
 		int startNum = page * 20;
 		PagingDto paging = companyDao.paging(page);
 		paging.dopaging();
+		CompanyFindAllRespDto companyFindAllRespDto = new CompanyFindAllRespDto();
+		companyFindAllRespDto.dopaging(paging);
 
-		Map<String, Object> result = new HashMap<>();
-		result.put("paging", paging);
-		result.put("list", companyDao.findAll(startNum));
-		return result;
+		companyFindAllRespDto.setCompanyList(companyDao.findAll(startNum));
+
+		return companyFindAllRespDto;
 	}
 
 	// 기업정보 수정
@@ -186,23 +188,35 @@ public class CompanyService {
 
 	}
 
-	public List<RecruitListByCompanyIdRespDto> 채용공고리스트불러오기(Integer id) {
-		for (int i = 0; i < recruitDao.findByCompanyId(id).get().size(); i++) {
-			System.out.println(recruitDao.findByCompanyId(id).get().get(i).getRecruitTitle());
+	// public List<RecruitListByCompanyIdRespDto> 채용공고리스트불러오기(Integer id) {
+	// for (int i = 0; i < recruitDao.findByCompanyId(id).get().size(); i++) {
+	// System.out.println(recruitDao.findByCompanyId(id).get().get(i).getRecruitTitle());
+	// }
+	// return recruitDao.findByCompanyId(id).get();
+	// }
+
+	@Transactional
+	public CompanyMypageRespDto 마이페이지보기(Integer companyId) {
+
+		// MyPageRespDto 생성 및 company정보 생성자 주입
+		Optional<CompanyFindById> companyFindByIdOP = companyDao.findById(companyId);
+		System.out.println(companyFindByIdOP.get().getCompanyName());
+
+		CompanyMypageRespDto companyMypageRespDto = new CompanyMypageRespDto(companyFindByIdOP.get());
+
+		try {
+			List<CompanyRecruitDto> companyRecruitList = recruitDao.findByCompanyId2(companyId);
+			companyMypageRespDto.setCompanyRecruitList(companyRecruitList);
+		} catch (Exception e) {
+			companyMypageRespDto.setCompanyRecruitList(null);
+			throw new RuntimeException("채용공고가 없습니다.");
 		}
-		return recruitDao.findByCompanyId(id).get();
+
+		return companyMypageRespDto;
 	}
 
 	public List<Resume> 지원목록보기(Integer companyId) {
 		return resumeDao.applyResumeList(companyId);
 	}
 
-	public CompanyMypageRespDto 마이페이지보기() {
-		// Integer countApply = companyService.지원목록보기(companyId).size();
-		// if (companyService.지원목록보기(companyId) == null) {
-		// countApply = 0;
-		// }
-
-		return new CompanyMypageRespDto();
-	}
 }

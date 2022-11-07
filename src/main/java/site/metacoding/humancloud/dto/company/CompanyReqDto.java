@@ -1,7 +1,5 @@
 package site.metacoding.humancloud.dto.company;
 
-import org.apache.ibatis.type.Alias;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,12 +8,11 @@ import lombok.Setter;
 import site.metacoding.humancloud.domain.company.Company;
 
 public class CompanyReqDto {
-
     @Builder
-    @AllArgsConstructor
     @NoArgsConstructor
     @Setter
     @Getter
+    @AllArgsConstructor
     public static class CompanyJoinReqDto {
         private Integer companyId;
         private String companyUsername;
@@ -53,6 +50,9 @@ public class CompanyReqDto {
         }
     }
 
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Setter
     @Getter
     public static class CompanyUpdateReqDto {

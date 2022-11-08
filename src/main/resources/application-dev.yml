@@ -9,11 +9,13 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: ${rds.username}
     password: ${rds.password}
-  
   output:
     ansi:
       enabled: always
 
+  jar{
+    enabled: false
+  }
 
 logging:
   level:

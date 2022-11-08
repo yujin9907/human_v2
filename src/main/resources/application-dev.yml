@@ -13,10 +13,6 @@ spring:
     ansi:
       enabled: always
 
-  jar{
-    enabled: false
-  }
-
 logging:
   level:
     '[site.metacoding.humancloud]': DEBUG

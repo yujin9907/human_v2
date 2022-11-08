@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
@@ -25,6 +26,7 @@ import site.metacoding.humancloud.util.annotation.Auth;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 public class RecruitController {
 
   private final RecruitService recruitService;
@@ -32,9 +34,9 @@ public class RecruitController {
   private final ApplyService applyService;
 
   // main
-  @GetMapping("/{page}")
-  public ResponseDto<?> main(@PathVariable("page") int startNum) {
-    return new ResponseDto<>(1, "성공", recruitService.메인공고목록보기(startNum));
+  @GetMapping("/")
+  public ResponseDto<?> main() {
+    return new ResponseDto<>(1, "성공", recruitService.메인공고목록보기());
   }
 
   // @GetMapping("recruit/update/{id}")
@@ -53,7 +55,6 @@ public class RecruitController {
   }
 
   // 수정중
-  @Auth(role = 0)
   @GetMapping("/recruit/detail/{id}/{userId}")
   public ResponseDto<?> recruit_Detail(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId,
       Model model) {
@@ -69,6 +70,7 @@ public class RecruitController {
   @Auth(role = 1)
   @PostMapping("/s/recruit/save")
   public ResponseDto<?> write(@RequestBody RecruitSaveReqDto recruitSaveReqDto) {
+
     return new ResponseDto<>(1, "성공", recruitService.구인공고작성(recruitSaveReqDto));
   }
 

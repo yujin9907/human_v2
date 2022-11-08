@@ -1,5 +1,8 @@
 package site.metacoding.humancloud.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,260 +31,204 @@ import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.SessionUser;
-import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
-import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
+import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitRespDto.CompanyRecruitDtoRespDto;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 @Sql({ "classpath:ddl.sql", "classpath:dml.sql" })
 @Slf4j
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@RequiredArgsConstructor
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class RecruitControllerTest {
 
-    // header json
-    private static final String APPLICATION_JSON = "application/json; charset=utf-8";
+        // header json
+        private static final String APPLICATION_JSON = "application/json; charset=utf-8";
 
-    @Autowired
-    private ObjectMapper om;
-    @Autowired
-    private MockMvc mvc;
+        @Autowired
+        private ObjectMapper om;
+        @Autowired
+        private MockMvc mvc;
+        @Autowired
+        private UserDao userDao;
 
-    @Autowired
-    private UserDao userDao;
+        @Autowired
+        private CompanyDao companyDao;
 
-    @Autowired
-    private CompanyDao companyDao;
+        @Autowired
+        private MockHttpSession userSession;
 
-    @Autowired
-    private MockHttpSession userSession;
+        @Autowired
+        private MockHttpSession companySession;
 
-    @Autowired
-    private MockHttpSession companySession;
+        @Autowired
+        private ResumeDao resumeDao;
+        @Autowired
+        private ResumeController resumeController;
 
-    @Autowired
-    private ResumeDao resumeDao;
-    @Autowired
-    private ResumeController resumeController;
+        @BeforeEach
+        public void userSessionInit() {
+                userSession.setAttribute("sessionUser",
+                                SessionUser.builder().id(1).username("ssar").role(1).build());
+        }
 
-    @BeforeEach
-    public void userSessionInit() {
-        userSession.setAttribute("sessionUser",
-                SessionUser.builder().id(1).username("ssar").role(1).build());
-    }
+        @BeforeEach
+        public void companySessionInit() {
+                companySession.setAttribute("sessionUser",
+                                SessionUser.builder().id(1).username("adt").role(1).build());
+        }
 
-    @BeforeEach
-    public void companySessionInit() {
-        companySession.setAttribute("sessionUser",
-                SessionUser.builder().id(1).username("adt").role(1).build());
-    }
+        @Test
+        public void recruitsave_test() throws Exception {
+                // given
+                RecruitSaveReqDto recruitSaveReqDto = RecruitSaveReqDto.builder()
+                                .recruitTitle("제제제제제제목")
+                                .recruitContent("내내내낸내용")
+                                .recruitCareer("1년")
+                                .recruitCompanyId(1)
+                                .recruitLocation("서울")
+                                .recruitReadCount(1)
+                                .recruitDeadline("ddd")
+                                .recruitSalary(5000)
+                                .build();
 
-    @Test
-    public void 인터셉터테스트() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/test"));
-    }
+                List<String> recruitCategoryList = new ArrayList<>();
+                recruitCategoryList.add(0, "머머");
+                recruitCategoryList.add(1, "공주");
 
-    @Test
-    public void create_test() throws Exception {
-        // given
-        List<String> categoryList = new ArrayList<>();
-        categoryList.add("Java");
-        categoryList.add("JavaScript");
+                recruitSaveReqDto.setRecruitCategoryList(recruitCategoryList);
+                String body = om.writeValueAsString(recruitSaveReqDto);
 
-        String fileName = "testCustomerUpload.jpg";
+                // then
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.post("/s/recruit/save").content(body)
+                                                .contentType(APPLICATION_JSON)
+                                                .accept(APPLICATION_JSON).session(companySession));
 
-        ResumeSaveReqDto resumeSaveReqDto = new ResumeSaveReqDto(
-                1,
-                "이력서 테스트중",
-                "1년이상 ~ 3년미만",
-                "신입",
-                fileName,
-                "http:localhost:8000",
-                categoryList);
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+        }
 
-        String body = om.writeValueAsString(resumeSaveReqDto);
-        // when
+        @Test
+        public void recruitupdate_test() throws Exception {
+                // given
+                Integer recruitId = 1;
 
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.post(
-                        "/s/resume/save")
-                        .content(body).contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON).session(userSession));
+                RecruitUpdateReqDto recruitUpdateReqDto = RecruitUpdateReqDto.builder()
+                                .recruitTitle("제제제제제제목")
+                                .recruitContent("내내내낸내용")
+                                .recruitCareer("1년")
+                                .recruitCompanyId(1)
+                                .recruitLocation("서울")
+                                .recruitSalary(5000)
+                                .recruitCategoryList(null).build();
+                List<String> recruitCategoryList = new ArrayList<>();
+                recruitCategoryList.add(0, "머머");
+                recruitCategoryList.add(1, "공주");
 
-        // then
-        MvcResult mvcResult = resultActions.andReturn();
+                recruitUpdateReqDto.setRecruitCategoryList(recruitCategoryList);
 
-        log.debug("디버그 : " + mvcResult);
+                String body = om.writeValueAsString(recruitUpdateReqDto);
 
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-    }
+                // when
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.put("/s/recruit/update/" + recruitId).content(body)
+                                                .contentType(APPLICATION_JSON)
+                                                .accept(APPLICATION_JSON).session(companySession));
 
-    @Test
-    public void detailResume_test() throws Exception {
-        // given
-        Integer resumeId = 1;
-        Integer userId = 1;
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+        }
 
-        // when
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.get("/s/resume/detail/" + resumeId + "/" + userId)
-                        .accept(APPLICATION_JSON)
-                        .session(userSession));
+        @Test
+        public void recruitmain_test() throws Exception {
+                // given , 한 페이지에서 볼 목록 개수 10 = 0 개 / 0 = 10 개
 
-        // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+                // when
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.get("/")
+                                                .accept(APPLICATION_JSON));
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
 
-    }
+        }
 
-    @Test
-    public void updateResume_test() throws Exception {
-        // given
-        List<String> categoryList = new ArrayList<>();
-        categoryList.add("Java");
-        categoryList.add("JavaScript");
+        @Test
+        public void recruitdetail_test() throws Exception {
+                // given
+                Integer recruitId = 1;
+                Integer userId = 1;
 
-        String fileName = "testCustomerUpload.jpg";
+                // when
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.get("/recruit/detail/" + recruitId + "/" + userId)
+                                                .accept(APPLICATION_JSON));
 
-        ResumeUpdateReqDto resumeUpdateReqDto = new ResumeUpdateReqDto(1,
-                1,
-                "이력서 테스트중",
-                "1년이상 ~ 3년미만",
-                "신입",
-                fileName,
-                "http:localhost:8000",
-                categoryList);
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+        }
 
-        String body = om.writeValueAsString(resumeUpdateReqDto);
-        // when
+        @Test
+        public void 공고삭제하기테스트() throws Exception {
+                // given
+                Integer recruitId = 1;
 
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.put(
-                        "/s/resume/update/" + resumeUpdateReqDto.getResumeId())
-                        .content(body).contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON).session(userSession));
+                // when
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.delete("/s/recruit/delete/" + recruitId)
+                                                .session(companySession));
 
-        // then
-        MvcResult mvcResult = resultActions.andReturn();
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+                // then
+        }
 
-        log.debug("디버그 : " + mvcResult);
+        @Test
+        public void viewCategory_test() throws Exception {
+                // given
+                Category category = new Category(1, "Java");
 
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-    }
+                Integer page = 0;
 
-    @Test
-    public void 공고삭제하기테스트() throws Exception {
-        // given
-        Integer recruitId = 1;
+                String body = om.writeValueAsString(category);
 
-        // when
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.delete("/s/recruit/delete/" + recruitId)
-                        .session(companySession));
+                // when
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.post(
+                                                "/s/resume?page=" + page + "&category=" + category.getCategoryName())
+                                                .content(body).contentType(APPLICATION_JSON)
+                                                .accept(APPLICATION_JSON).session(companySession));
 
-        // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-        // then
-    }
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+        }
 
-    @Test
-    public void 채용공고목록보기테스트() throws Exception {
-        // given
+        @Test
+        public void orderList_test() throws Exception {
+                // given
+                String order = "education";
+                Integer page = 0;
 
-        // when
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.get("/recruit/list")
-                        .accept(APPLICATION_JSON)
-                        .session(companySession));
+                Integer companyId = 1;
+                String body = om.writeValueAsString(companyId);
 
-        // then
+                // when
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.post(
+                                                "/s/resume/list?page=" + page + "&order=" + order)
+                                                .content(body).contentType(APPLICATION_JSON)
+                                                .accept(APPLICATION_JSON).session(companySession));
 
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-
-    }
-
-    @Test
-    public void 분류별채용공고목록보기테스트() throws Exception {
-        // given
-        Category category = new Category(1, "Java");
-
-        String body = om.writeValueAsString(category);
-
-        // when
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.post(
-                        "/recruit/category")
-                        .content(body).contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON));
-
-        // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-    }
-
-    // @Test
-    // public void viewList_test() throws Exception {
-    // // given
-    // Integer page = 1;
-
-    // // when
-    // ResultActions resultActions = mvc.perform(
-    // MockMvcRequestBuilders.get("/s/resume?page=" + page)
-    // .accept(APPLICATION_JSON)
-    // .session(companySession));
-
-    // // then
-
-    // resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-    // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-
-    // }
-
-    // @Test
-    // public void viewCategory_test() throws Exception {
-    // // given
-    // Category category = new Category(1, "Java");
-
-    // Integer page = 0;
-
-    // String body = om.writeValueAsString(category);
-
-    // // when
-    // ResultActions resultActions = mvc.perform(
-    // MockMvcRequestBuilders.post(
-    // "/s/resume?page=" + page + "&category=" + category.getCategoryName())
-    // .content(body).contentType(APPLICATION_JSON)
-    // .accept(APPLICATION_JSON).session(companySession));
-
-    // // then
-    // resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-
-    // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-    // }
-
-    @Test
-    public void orderList_test() throws Exception {
-        // given
-        String order = "education";
-        Integer page = 0;
-
-        Integer companyId = 1;
-        String body = om.writeValueAsString(companyId);
-
-        // when
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.post(
-                        "/s/resume/list?page=" + page + "&order=" + order)
-                        .content(body).contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON).session(companySession));
-
-        // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-    }
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+        }
 }

@@ -1,4 +1,4 @@
-name: aws-v5
+name: humancloud
 on:
   push:
     branches:

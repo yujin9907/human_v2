@@ -32,7 +32,7 @@ import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.util.SHA256;
 
 @Sql({ "classpath:ddl.sql", "classpath:dml.sql" })
-@Slf4j
+
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @RequiredArgsConstructor

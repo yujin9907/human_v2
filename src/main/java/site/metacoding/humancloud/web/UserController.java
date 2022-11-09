@@ -21,10 +21,10 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/")
-    public String TestInterceptor() {
-        return "aa";
-    }
+    // @GetMapping("/")
+    // public String TestInterceptor() {
+    // return "aa";
+    // }
 
     @PostMapping("/join")
     public ResponseDto<?> joinUser(@RequestBody JoinReqDto joinReqDto) {

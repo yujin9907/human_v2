@@ -21,10 +21,9 @@ public class UserController {
 
     private final UserService userService;
 
-    @Auth(role = 0)
-    @GetMapping("/test")
-    public void TestInterceptor() {
-
+    @GetMapping("/")
+    public String TestInterceptor() {
+        return "aa";
     }
 
     @PostMapping("/join")
